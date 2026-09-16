@@ -1,0 +1,144 @@
+{
+  "A_throughput": {
+    "v1_naive_key_per_sec": 13646.288209607881,
+    "v2_stride_key_per_sec": 43233.89537397129,
+    "v2_masked_key_per_sec": 44762.757385847384,
+    "v2_strides_per_sec": 125470.51442903356,
+    "_note": "single-target mask cannot skip (every bucket == target bucket); masked path is ~ the stride cost + hash compare."
+  },
+  "B_dlp_scaling": {
+    "w16": {
+      "bits": 16,
+      "k": 57089,
+      "bsgs_ok": true,
+      "bsgs_secs": 0.062,
+      "bsgs_m": 182,
+      "bsgs_memory_points": 182,
+      "kang_ok": true,
+      "kang_secs": 0.391,
+      "kang_hops": 212,
+      "theory_hops_mean": 226.9,
+      "kang_over_theory": 0.93,
+      "mean_jump": 181.01933598375618
+    },
+    "w20": {
+      "bits": 20,
+      "k": 976411,
+      "bsgs_ok": true,
+      "bsgs_secs": 0.297,
+      "bsgs_m": 725,
+      "bsgs_memory_points": 725,
+      "kang_ok": true,
+      "kang_secs": 1.812,
+      "kang_hops": 1762,
+      "theory_hops_mean": 907.5,
+      "kang_over_theory": 1.94,
+      "mean_jump": 724.0773439350247
+    },
+    "w24": {
+      "bits": 24,
+      "k": 14416367,
+      "bsgs_ok": true,
+      "bsgs_secs": 0.844,
+      "bsgs_m": 2897,
+      "bsgs_memory_points": 2897,
+      "kang_ok": true,
+      "kang_secs": 5.516,
+      "kang_hops": 1895,
+      "theory_hops_mean": 3630.0,
+      "kang_over_theory": 0.52,
+      "mean_jump": 2896.309375740099
+    },
+    "w28": {
+      "bits": 28,
+      "k": 213163340,
+      "bsgs_ok": true,
+      "bsgs_secs": 3.312,
+      "bsgs_m": 11586,
+      "bsgs_memory_points": 11586,
+      "kang_ok": true,
+      "kang_secs": 31.328,
+      "kang_hops": 28845,
+      "theory_hops_mean": 14519.9,
+      "kang_over_theory": 1.99,
+      "mean_jump": 11585.237502960395
+    }
+  },
+  "C_solved_key_stats": {
+    "solved_keys": 83,
+    "bit_range": [
+      1,
+      135
+    ],
+    "top_nibble": {
+      "8": 7,
+      "9": 9,
+      "10": 12,
+      "11": 12,
+      "12": 6,
+      "13": 17,
+      "14": 10,
+      "15": 7
+    },
+    "last_nibble": {
+      "0": 6,
+      "1": 6,
+      "2": 3,
+      "3": 8,
+      "4": 10,
+      "5": 5,
+      "6": 5,
+      "7": 4,
+      "8": 5,
+      "9": 2,
+      "10": 1,
+      "11": 3,
+      "12": 7,
+      "13": 3,
+      "14": 7,
+      "15": 8
+    },
+    "relative_pos_bins_10": [
+      7,
+      7,
+      7,
+      10,
+      10,
+      5,
+      14,
+      8,
+      6,
+      9
+    ],
+    "rel_mean": 0.514,
+    "rel_min_max": [
+      0.0,
+      1.0
+    ],
+    "hamming_mean_frac": 0.516,
+    "hamming_mean_frac_expected": 0.5,
+    "findings": [
+      "uniform top nibble ~= expected under random keys in [2^(n-1), 2^n)",
+      "uniform last nibble: no mod-16 residue is favoured by the generator",
+      "relative position uniform: solved keys are not biased toward any part of the interval (no positional shortcut)",
+      "hamming weight ~ n/2 as expected for uniform independent bits"
+    ]
+  },
+  "D_ladder_demo": {
+    "bits": 20,
+    "k": 586742,
+    "v1_scan_10k_keys_secs": 3.563,
+    "v2_stride_hits_at": null,
+    "v3_k": 586742,
+    "v3_stats": {
+      "m": 725,
+      "baby_size": 725,
+      "giant_steps": 87,
+      "memory_points": 725,
+      "method": "bsgs"
+    },
+    "v4_k": 586742,
+    "v4_hops": 146,
+    "all_agree": true
+  }
+}

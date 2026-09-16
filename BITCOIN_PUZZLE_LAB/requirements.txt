@@ -1,0 +1,2 @@
+# No third-party dependencies. The lab uses only the Python standard library
+# (hashlib for SHA256/RIPEMD160, builtin pow for modular field arithmetic).
