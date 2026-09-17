@@ -11,7 +11,8 @@
 #
 # Usage:
 #   bash production/build/build_gpuopt.sh [CCAP]
-#       CCAP default = 89   (L4).  75 = T4,  80 = A100.  0 = fat binary.
+#       CCAP default = 0    (fat binary: sm_75 T4 + sm_80 A100 + sm_89 L4).
+#       75 = T4 only, 80 = A100 only, 89 = L4 only (single-arch build).
 #
 # Flags (rationale in GPUOptLaunch.h):
 #   -O3 --use_fast_math -Xptxas -v,-O3  → -O3 code + ptxas register/spill audit.
@@ -28,7 +29,7 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 SRC="$ROOT/build/src/Kangaroo"
 OUT="$ROOT/build"
-CCAP="${1:-89}"
+CCAP="${1:-0}"
 
 command -v nvcc >/dev/null 2>&1 || { echo "ERROR: nvcc not found (CUDA toolkit missing)"; exit 1; }
 command -v g++  >/dev/null 2>&1 || { echo "ERROR: g++ not found"; exit 1; }
