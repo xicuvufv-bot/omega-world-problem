@@ -87,11 +87,28 @@ public:
 
     void SetMaxItersPerLaunch(long long iters);
 
+    // GPUEngine parity no-ops: the persistent kernel needs no per-step warm-up
+    // launch. The first Launch() call starts kernOpt; these stubs keep the
+    // Kangaroo.cpp call-site source-compatible.
+    bool callKernelAndWait() { return true; }
+    bool callKernel()        { return true; }
+
     // Query interface (GPUEngine parity)
     int  GetNbThread();      // number of herds (GPU_GRP_SIZE kangaroos each)
     int  GetGroupSize();     // kangaroos per block
     int  GetMemory();        // total device+pinned bytes
     std::string deviceName;
+
+    // Steps executed in the last chunk (spans, not boards): the Kangaroo
+    // caller multiplies total kangaroos by this instead of NB_RUN=64, because
+    // the OPT kernel advances maxItersPerLaunch per Launch() call.
+    uint64_t GetLastChunkIters();
+
+    // Static grid query (GPUEngine parity). Trains the occupancy API on the
+    // running device and returns x = auto-tuned grid blocks, y = 1. The
+    // Kangaroo caller computes herd count as GPU_GRP_SIZE * x * y, which
+    // equals blocksPerGrid * OPT_BLOCK_THREADS (the engine's true population).
+    static bool GetGridSize(int gpuId,int *x,int *y);
 
     // Throughput metrics
     double GetElapsedGPU();   // seconds, last chunk (CUDA event time)

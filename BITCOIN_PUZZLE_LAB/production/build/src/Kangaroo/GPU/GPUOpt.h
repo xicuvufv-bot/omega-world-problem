@@ -25,6 +25,16 @@
 #define OPT_DP_HEADER_WORDS 4   // dpOut[0] = published count (host-consumed),
                                 // dpOut[1] = internal slot allocator (pre-data
                                 // reservation), dpOut[2..3] reserved
+//
+// Minimum resident blocks per SM requested of the compiler, 2 = register-
+// first policy. With 128 threads/block the SASS register budget becomes
+//        floor(65536 / (2*128)) = 256 regs/thread on sm_75/sm_80/sm_89,
+// which (a) guarantees ZERO local-memory spill for the field-mul temporaries
+// that dominate this kernel, at the cost of ~8 resident warps/SM (2 per warp
+// scheduler). Raise to 8 (64 regs) only if the occupancy API shows the 2-block
+// grid is latency-bound on a specific GPU; never change between x and y, the
+// SASS cap is baked in at compile time.
+#define OPT_LAUNCH_MIN_BLOCKS 2
 
 // secp256k1 field prime p = 2^256 - 2^32 - 977, LE limbs:
 #define P0 0xFFFFFFFEFFFFFC2FULL
@@ -198,6 +208,10 @@ __device__ __forceinline__ void fe256_inv(fe256 &r, const fe256 &a) {
     fe256 result; fe256_set_one(result);
     fe256 base = a;
 
+    // Exponent is scalar-constant (p-2): unroll the 4-limb outer scan; the
+    // 64-bit inner loop is a hard serial dependency chain (each sqr feeds the
+    // next), so full unrolling gains nothing but I-cache.
+    #pragma unroll 4
     for (int limb = 3; limb >= 0; limb--) {
         for (int bit = 63; bit >= 0; bit--) {
             fe256_sqr(result, result);

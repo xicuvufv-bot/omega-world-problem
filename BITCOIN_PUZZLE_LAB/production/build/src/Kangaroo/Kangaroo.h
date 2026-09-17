@@ -42,6 +42,7 @@ typedef int SOCKET;
 #include "HashTable.h"
 #include "SECPK1/IntGroup.h"
 #include "GPU/GPUEngine.h"
+#include "GPU/GPUOptEngine.h"
 
 #ifdef WIN64
 typedef HANDLE THREAD_HANDLE;

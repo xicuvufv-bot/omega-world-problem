@@ -518,9 +518,9 @@ void Kangaroo::SolveKeyGPU(TH_PARAM *ph) {
 
   vector<ITEM> dps;
   vector<ITEM> gpuFound;
-  GPUEngine *gpu;
+  GPUOptEngine *gpu;
 
-  gpu = new GPUEngine(ph->gridSizeX,ph->gridSizeY,ph->gpuId,65536 * 2);
+  gpu = new GPUOptEngine(ph->gridSizeX * ph->gridSizeY, 1, ph->gpuId, 65536 * 2);
 
   if(keyIdx == 0)
     ::printf("GPU: %s (%.1f MB used)\n",gpu->deviceName.c_str(),gpu->GetMemory() / 1048576.0);
@@ -561,6 +561,10 @@ void Kangaroo::SolveKeyGPU(TH_PARAM *ph) {
   }
 
   gpu->callKernel();
+  // NOTE: GPUOptEngine is a PERSISTENT kernel — no per-chunk relaunch step.
+  // callKernel() is a source-compatibility no-op stub; the first Launch()
+  // call starts the resident kernel and each subsequent Launch() drives the
+  // next chunk on the same launch.
 
   double t1 = Timer::get_tick();
 
@@ -572,7 +576,7 @@ void Kangaroo::SolveKeyGPU(TH_PARAM *ph) {
   while(!endOfSearch) {
 
     gpu->Launch(gpuFound);
-    counters[thId] += ph->nbKangaroo * NB_RUN;
+    counters[thId] += ph->nbKangaroo * gpu->GetLastChunkIters();
 
     if( clientMode ) {
 
@@ -946,7 +950,7 @@ void Kangaroo::Run(int nbThread,std::vector<int> gpuId,std::vector<int> gridSize
   for(int i = 0; i < nbGPUThread; i++) {
     int x = gridSize[2ULL * i];
     int y = gridSize[2ULL * i + 1ULL];
-    if(!GPUEngine::GetGridSize(gpuId[i],&x,&y)) {
+    if(!GPUOptEngine::GetGridSize(gpuId[i],&x,&y)) {
       return;
     } else {
       params[nbCPUThread + i].gridSizeX = x;

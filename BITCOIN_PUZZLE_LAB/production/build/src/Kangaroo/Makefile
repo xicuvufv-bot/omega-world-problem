@@ -8,7 +8,8 @@ ifdef gpu
 SRC = SECPK1/IntGroup.cpp main.cpp SECPK1/Random.cpp \
       Timer.cpp SECPK1/Int.cpp SECPK1/IntMod.cpp \
       SECPK1/Point.cpp SECPK1/SECP256K1.cpp \
-      GPU/GPUEngine.o Kangaroo.cpp HashTable.cpp \
+      GPU/GPUEngine.o GPU/GPUOptEngine.o GPU/GPUOptKernel.o \
+      Kangaroo.cpp HashTable.cpp \
       Backup.cpp Thread.cpp Check.cpp Network.cpp Merge.cpp PartMerge.cpp
 
 OBJDIR = obj
@@ -17,7 +18,8 @@ OBJET = $(addprefix $(OBJDIR)/, \
       SECPK1/IntGroup.o main.o SECPK1/Random.o \
       Timer.o SECPK1/Int.o SECPK1/IntMod.o \
       SECPK1/Point.o SECPK1/SECP256K1.o \
-      GPU/GPUEngine.o Kangaroo.o HashTable.o Thread.o \
+      GPU/GPUEngine.o GPU/GPUOptEngine.o GPU/GPUOptKernel.o \
+      Kangaroo.o HashTable.o Thread.o \
       Backup.o Check.o Network.o Merge.o PartMerge.o)
 
 else
@@ -70,9 +72,17 @@ ifdef gpu
 ifdef debug
 $(OBJDIR)/GPU/GPUEngine.o: GPU/GPUEngine.cu
 	$(NVCC) -G -maxrregcount=0 --ptxas-options=-v --compile --compiler-options -fPIC -ccbin $(CXXCUDA) -m64 -g -I$(CUDA)/include -gencode=arch=compute_$(ccap),code=sm_$(ccap) -o $(OBJDIR)/GPU/GPUEngine.o -c GPU/GPUEngine.cu
+$(OBJDIR)/GPU/GPUOptEngine.o: GPU/GPUOptEngine.cu
+	$(NVCC) -G -maxrregcount=0 --ptxas-options=-v --compile --compiler-options -fPIC -ccbin $(CXXCUDA) -m64 -g -I$(CUDA)/include -gencode=arch=compute_$(ccap),code=sm_$(ccap) -o $(OBJDIR)/GPU/GPUOptEngine.o -c GPU/GPUOptEngine.cu
+$(OBJDIR)/GPU/GPUOptKernel.o: GPU/GPUOptKernel.cu
+	$(NVCC) -G -maxrregcount=0 --ptxas-options=-v --compile --compiler-options -fPIC -ccbin $(CXXCUDA) -m64 -g -I$(CUDA)/include -gencode=arch=compute_$(ccap),code=sm_$(ccap) -o $(OBJDIR)/GPU/GPUOptKernel.o -c GPU/GPUOptKernel.cu
 else
 $(OBJDIR)/GPU/GPUEngine.o: GPU/GPUEngine.cu
 	$(NVCC) -maxrregcount=0 --ptxas-options=-v --compile --compiler-options -fPIC -ccbin $(CXXCUDA) -m64 -O2 -I$(CUDA)/include -gencode=arch=compute_$(ccap),code=sm_$(ccap) -o $(OBJDIR)/GPU/GPUEngine.o -c GPU/GPUEngine.cu
+$(OBJDIR)/GPU/GPUOptEngine.o: GPU/GPUOptEngine.cu
+	$(NVCC) -maxrregcount=0 --ptxas-options=-v --compile --compiler-options -fPIC -ccbin $(CXXCUDA) -m64 -O2 -I$(CUDA)/include -gencode=arch=compute_$(ccap),code=sm_$(ccap) -o $(OBJDIR)/GPU/GPUOptEngine.o -c GPU/GPUOptEngine.cu
+$(OBJDIR)/GPU/GPUOptKernel.o: GPU/GPUOptKernel.cu
+	$(NVCC) -maxrregcount=0 --ptxas-options=-v --compile --compiler-options -fPIC -ccbin $(CXXCUDA) -m64 -O2 -I$(CUDA)/include -gencode=arch=compute_$(ccap),code=sm_$(ccap) -o $(OBJDIR)/GPU/GPUOptKernel.o -c GPU/GPUOptKernel.cu
 endif
 endif
 

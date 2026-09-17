@@ -45,6 +45,10 @@ __device__ __forceinline__ void warp_batch_inv(
 
     // --- Inclusive prefix P[i], Kogge-Stone (strides 1..16) ---
     fe256 p = xi;
+    // Fixed 5-iteration tree: full unroll lifts the __shfl_up + mul chain for
+    // ILP. Each stride level is independent across lanes, so the compiler can
+    // hoist the 4 shfl reads ahead of the 256x256 muls (long-latency path).
+    #pragma unroll
     for (int stride = 1; stride < OPT_WARP_SIZE; stride <<= 1) {
         uint64_t o0 = __shfl_up_sync(0xFFFFFFFF, p.v[0], stride);
         uint64_t o1 = __shfl_up_sync(0xFFFFFFFF, p.v[1], stride);
@@ -59,6 +63,7 @@ __device__ __forceinline__ void warp_batch_inv(
 
     // --- Inclusive suffix S[i], Kogge-Stone (strides 1..16) ---
     fe256 s = xi;
+    #pragma unroll
     for (int stride = 1; stride < OPT_WARP_SIZE; stride <<= 1) {
         uint64_t o0 = __shfl_down_sync(0xFFFFFFFF, s.v[0], stride);
         uint64_t o1 = __shfl_down_sync(0xFFFFFFFF, s.v[1], stride);
@@ -134,11 +139,13 @@ __device__ __forceinline__ void warp_batch_inv(
 //   kan[ b*(10*OPT_BLOCK_THREADS) + l*OPT_BLOCK_THREADS + t ]
 //   l: 0..3 px, 4..7 py, 8..9 dist.  Coalesced: consecutive t -> consecutive word.
 // Jump table: [OPT_NB_JUMP][10] = { dx0..3, dy0..3, d0,d1 }
-extern "C" __global__ void __launch_bounds__(OPT_BLOCK_THREADS, 8)
-kernOpt(uint64_t *kan,     // SoA kangaroo state, layout above
-        uint32_t *dpOut,   // [count header][dp_entry...]
-        const uint64_t *jump,   // jump table [OPT_NB_JUMP][10 u64]
-        uint64_t dpMask,
+extern "C" __global__ void __launch_bounds__(OPT_BLOCK_THREADS, OPT_LAUNCH_MIN_BLOCKS)
+kernOpt(uint64_t * __restrict__ kan, // SoA kangaroo state — __restrict__: the 3
+        uint32_t * __restrict__ dpOut,// device buffers are disjoint allocations,
+        const uint64_t * __restrict__ jump, // jump is read-only point-invariant
+        uint64_t dpMask,            // → compiler may cache/hoist; it never aliases
+                                    // kan/dpOut. Feeds ld.global.nc (non-coherent
+                                    // L1 path) for the jump gathers below.
         int      maxFound,     // DP slots available past the header
         int      maxIters,
         const uint32_t *stopFlag)  // volatile-polled stop signal (device mem)
@@ -149,30 +156,39 @@ kernOpt(uint64_t *kan,     // SoA kangaroo state, layout above
                              * (OPT_BLOCK_THREADS * 10ULL);
 
     // ---- Load this thread's kangaroo (coalesced across threads) ----
+    // SoA planing: consecutive threads touch consecutive 8-byte words in each
+    // of the 10 128-thread word planes → 1024-byte contiguous per plane per
+    // block = 8× 128B sectors, fully coalesced 64-bit loads, no bank conflicts
+    // (shared memory is NOT used by design).
     uint64_t px[4], py[4], dist[2];
     const uint64_t base = blockBase + tid;
-    px[0]=kan[base];
-    px[1]=kan[base + 1*OPT_BLOCK_THREADS];
-    px[2]=kan[base + 2*OPT_BLOCK_THREADS];
-    px[3]=kan[base + 3*OPT_BLOCK_THREADS];
-    py[0]=kan[base + 4*OPT_BLOCK_THREADS];
-    py[1]=kan[base + 5*OPT_BLOCK_THREADS];
-    py[2]=kan[base + 6*OPT_BLOCK_THREADS];
-    py[3]=kan[base + 7*OPT_BLOCK_THREADS];
-    dist[0]=kan[base + 8*OPT_BLOCK_THREADS];
-    dist[1]=kan[base + 9*OPT_BLOCK_THREADS];
+    #pragma unroll
+    for (int k = 0; k < 10; k++) {
+        uint64_t w = kan[base + k * OPT_BLOCK_THREADS];
+        if      (k < 4) px[k]     = w;
+        else if (k < 8) py[k - 4] = w;
+        else            dist[k - 8] = w;
+    }
 
     // ---- Main walk loop (persistent: state stays resident) ----
     for (int it = 0; it < maxIters && !*((volatile uint32_t*)stopFlag); it++) {
 
-        // Jump index from low bits of px (matches v2.2 convention)
+        // Jump index from low bits of px (matches v2.2 convention).
+        // Gather through __ldg → ld.global.nc: the 32×10×8B table is only
+        // 2.5 KB, resident in L1/read-only cache, and NEVER written on device,
+        // so the non-coherent texture path avoids L2 round-trips entirely.
         uint64_t ji = px[0] & (OPT_NB_JUMP - 1);
         const uint64_t *jv = jump + ji * 10;
+        uint64_t jx0 = __ldg(jv + 0), jx1 = __ldg(jv + 1),
+                 jx2 = __ldg(jv + 2), jx3 = __ldg(jv + 3);
+        uint64_t jy0 = __ldg(jv + 4), jy1 = __ldg(jv + 5),
+                 jy2 = __ldg(jv + 6), jy3 = __ldg(jv + 7);
+        uint64_t jd0 = __ldg(jv + 8), jd1 = __ldg(jv + 9);
 
         uint64_t delta[4];
         fe256 a, b, r;
         a.v[0]=px[0]; a.v[1]=px[1]; a.v[2]=px[2]; a.v[3]=px[3];
-        b.v[0]=jv[0]; b.v[1]=jv[1]; b.v[2]=jv[2]; b.v[3]=jv[3];
+        b.v[0]=jx0;   b.v[1]=jx1;   b.v[2]=jx2;   b.v[3]=jx3;
         fe256_sub(r, a, b);          // dx = px - jumpX
         delta[0]=r.v[0]; delta[1]=r.v[1]; delta[2]=r.v[2]; delta[3]=r.v[3];
 
@@ -185,8 +201,8 @@ kernOpt(uint64_t *kan,     // SoA kangaroo state, layout above
         //   newX   = lambda^2 - jx - px
         //   newY   = lambda * (px - newX) - py
         fe256 jy, jx, cx, cy, invA, lam, ny, nx, t;
-        jx.v[0]=jv[0]; jx.v[1]=jv[1]; jx.v[2]=jv[2]; jx.v[3]=jv[3];
-        jy.v[0]=jv[4]; jy.v[1]=jv[5]; jy.v[2]=jv[6]; jy.v[3]=jv[7];
+        jx.v[0]=jx0; jx.v[1]=jx1; jx.v[2]=jx2; jx.v[3]=jx3;
+        jy.v[0]=jy0; jy.v[1]=jy1; jy.v[2]=jy2; jy.v[3]=jy3;
         cx.v[0]=px[0]; cx.v[1]=px[1]; cx.v[2]=px[2]; cx.v[3]=px[3];
         cy.v[0]=py[0]; cy.v[1]=py[1]; cy.v[2]=py[2]; cy.v[3]=py[3];
         invA.v[0]=invd[0]; invA.v[1]=invd[1]; invA.v[2]=invd[2]; invA.v[3]=invd[3];
@@ -202,7 +218,7 @@ kernOpt(uint64_t *kan,     // SoA kangaroo state, layout above
 
         // Distance accumulation: dist += jD (plain 128-bit wrap, v2.2 Add128)
         scalar128 cur; cur.v[0]=dist[0]; cur.v[1]=dist[1];
-        scalar128 jumpD; jumpD.v[0]=jv[8]; jumpD.v[1]=jv[9];
+        scalar128 jumpD; jumpD.v[0]=jd0; jumpD.v[1]=jd1;
         scalar128_add(cur, cur, jumpD);
         dist[0]=cur.v[0]; dist[1]=cur.v[1];
 
@@ -231,18 +247,18 @@ kernOpt(uint64_t *kan,     // SoA kangaroo state, layout above
         if (isDp) {
             uint32_t slot = atomicAdd(dpOut + 1, 1u);
             if ((int)slot < maxFound) {
-                uint32_t *e = dpOut + OPT_DP_HEADER_WORDS + slot * 16;
-                e[0]=(uint32_t)(nx.v[0] & 0xFFFFFFFFULL); e[1]=(uint32_t)(nx.v[0]>>32);
-                e[2]=(uint32_t)(nx.v[1] & 0xFFFFFFFFULL); e[3]=(uint32_t)(nx.v[1]>>32);
-                e[4]=(uint32_t)(nx.v[2] & 0xFFFFFFFFULL); e[5]=(uint32_t)(nx.v[2]>>32);
-                e[6]=(uint32_t)(nx.v[3] & 0xFFFFFFFFULL); e[7]=(uint32_t)(nx.v[3]>>32);
-                e[8]=(uint32_t)(dist[0] & 0xFFFFFFFFULL);      e[9]=(uint32_t)(dist[0]>>32);
-                e[10]=(uint32_t)(dist[1] & 0xFFFFFFFFULL);     e[11]=(uint32_t)(dist[1]>>32);
+                // 16-word entry written as 8×64-bit stores: the slot stride is
+                // 16 words = 64 B, and the arena base + header offset keeps
+                // every slot 8-byte aligned (cudaMalloc → 256 B base), so the
+                // widened stores preserve one full 64B sector per slot — half
+                // the instructions of the 32-bit form and no partial sectors.
+                uint64_t *e = (uint64_t *)(dpOut + OPT_DP_HEADER_WORDS + slot * 16);
+                e[0]=nx.v[0];   e[1]=nx.v[1];   e[2]=nx.v[2];   e[3]=nx.v[3];
+                e[4]=dist[0];   e[5]=dist[1];
                 uint64_t kIdx = (uint64_t)blockIdx.x * (uint64_t)OPT_BLOCK_THREADS
                               + (uint64_t)threadIdx.x;
-                e[12]=(uint32_t)(kIdx & 0xFFFFFFFFULL);
-                e[13]=(uint32_t)(kIdx >> 32);
-                e[14]=0; e[15]=0;   // reserved
+                e[6]=kIdx;
+                e[7]=0;                       // reserved
                 __threadfence();
                 atomicAdd(dpOut, 1u);
             }
@@ -250,16 +266,14 @@ kernOpt(uint64_t *kan,     // SoA kangaroo state, layout above
     }
 
     // ---- Store back (coalesced across threads, same layout) ----
-    kan[base]                     = px[0];
-    kan[base + 1*OPT_BLOCK_THREADS] = px[1];
-    kan[base + 2*OPT_BLOCK_THREADS] = px[2];
-    kan[base + 3*OPT_BLOCK_THREADS] = px[3];
-    kan[base + 4*OPT_BLOCK_THREADS] = py[0];
-    kan[base + 5*OPT_BLOCK_THREADS] = py[1];
-    kan[base + 6*OPT_BLOCK_THREADS] = py[2];
-    kan[base + 7*OPT_BLOCK_THREADS] = py[3];
-    kan[base + 8*OPT_BLOCK_THREADS] = dist[0];
-    kan[base + 9*OPT_BLOCK_THREADS] = dist[1];
+    #pragma unroll
+    for (int k = 0; k < 10; k++) {
+        uint64_t w;
+        if      (k < 4) w = px[k];
+        else if (k < 8) w = py[k - 4];
+        else            w = dist[k - 8];
+        kan[base + k * OPT_BLOCK_THREADS] = w;
+    }
 }
 
 #endif // GPUOPTKERNEL_CU

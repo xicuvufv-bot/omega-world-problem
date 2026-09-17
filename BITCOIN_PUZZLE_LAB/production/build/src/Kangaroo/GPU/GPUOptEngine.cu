@@ -562,6 +562,38 @@ int GPUOptEngine::GetNbThread()
     return blocksPerGrid;
 }
 
+uint64_t GPUOptEngine::GetLastChunkIters()
+{
+    return lastChunkIters;
+}
+
+bool GPUOptEngine::GetGridSize(int gpuId,int *x,int *y)
+{
+    int deviceCount = 0;
+    cudaError_t err = cudaGetDeviceCount(&deviceCount);
+    if (err != cudaSuccess) {
+        fprintf(stderr,"GPUOptEngine::GetGridSize: cudaGetDeviceCount: %s\n",
+                cudaGetErrorString(err));
+        return false;
+    }
+    if (gpuId >= deviceCount) {
+        fprintf(stderr,"GPUOptEngine::GetGridSize Invalid gpuId\n");
+        return false;
+    }
+
+    // Same tuned grid the constructor would compute for this device: bind the
+    // device, train the occupancy API, then grid = SMs * achievable blocks/SM.
+    err = cudaSetDevice(gpuId);
+    if (err != cudaSuccess) return false;
+
+    OptLaunchConfig cfg;
+    if (!opt_tune_config(cfg)) return false;
+
+    *x = cfg.blocksPerGrid;
+    *y = 1;
+    return true;
+}
+
 int GPUOptEngine::GetGroupSize()
 {
     return OPT_BLOCK_THREADS;

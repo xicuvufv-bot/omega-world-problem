@@ -162,6 +162,9 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <ClInclude Include="..\Constants.h" />
     <ClInclude Include="..\GPU\GPUCompute.h" />
     <ClInclude Include="..\GPU\GPUEngine.h" />
+    <ClInclude Include="..\GPU\GPUOpt.h" />
+    <ClInclude Include="..\GPU\GPUOptEngine.h" />
+    <ClInclude Include="..\GPU\GPUOptLaunch.h" />
     <ClInclude Include="..\GPU\GPUMath.h" />
     <ClInclude Include="..\SECPK1\Int.h" />
     <ClInclude Include="..\SECPK1\IntGroup.h" />
@@ -196,6 +199,8 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <CudaCompile Include="..\GPU\GPUEngine.cu">
       <CodeGeneration Condition="'$(Configuration)|$(Platform)'=='Release|x64'">compute_20,sm_20</CodeGeneration>
     </CudaCompile>
+    <CudaCompile Include="..\GPU\GPUOptEngine.cu" />
+    <CudaCompile Include="..\GPU\GPUOptKernel.cu" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
