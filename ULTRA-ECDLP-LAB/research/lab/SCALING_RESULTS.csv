@@ -1,0 +1,46 @@
+db,l,method,seed,steps,ok,ms_ms,exc
+10,1093,bsgs,20260922,56,True,0.150,
+10,1093,bsgs,20260923,55,True,0.105,
+10,1093,bsgs,20260924,34,True,0.066,
+10,1093,rho,20260922,-1,False,18677.620,
+10,1093,rho,20260923,-1,False,0.345,TypeError: 'NoneType' object is not subscriptable
+10,1093,rho,20260924,-1,False,0.267,TypeError: 'NoneType' object is not subscriptable
+10,1093,kanga,20260922,-1,False,3.091,ValueError: base is not invertible for the given modulus
+10,1093,kanga,20260923,312,True,4.598,
+10,1093,kanga,20260924,-1,False,6.988,ValueError: base is not invertible for the given modulus
+12,4243,bsgs,20260922,111,True,0.266,
+12,4243,bsgs,20260923,109,True,0.265,
+12,4243,bsgs,20260924,67,True,0.161,
+12,4243,rho,20260922,-1,False,20477.184,
+12,4243,rho,20260923,-1,False,22401.487,
+12,4243,rho,20260924,-1,False,22659.523,
+12,4243,kanga,20260922,-1,False,1.347,ValueError: base is not invertible for the given modulus
+12,4243,kanga,20260923,-1,False,2.417,ValueError: base is not invertible for the given modulus
+12,4243,kanga,20260924,3580,True,9.575,
+14,16693,bsgs,20260922,221,True,0.353,
+14,16693,bsgs,20260923,217,True,0.342,
+14,16693,bsgs,20260924,133,True,0.209,
+14,16693,rho,20260922,-1,False,22194.137,
+14,16693,rho,20260923,-1,False,23303.292,
+14,16693,rho,20260924,-1,False,23857.655,
+14,16693,kanga,20260922,-1,False,15.514,ValueError: base is not invertible for the given modulus
+14,16693,kanga,20260923,6367,True,31.498,
+14,16693,kanga,20260924,4084,True,16.791,
+16,65173,bsgs,20260922,488,True,1.004,
+16,65173,bsgs,20260923,346,True,0.698,
+16,65173,bsgs,20260924,261,True,0.539,
+16,65173,rho,20260922,-1,False,18501.800,
+16,65173,rho,20260923,-1,False,16499.312,
+16,65173,rho,20260924,903,True,2.042,
+16,65173,kanga,20260922,7111,True,22.638,
+16,65173,kanga,20260923,9973,True,30.580,
+16,65173,kanga,20260924,-1,False,42.737,ValueError: base is not invertible for the given modulus
+18,262567,bsgs,20260922,883,True,1.869,
+18,262567,bsgs,20260923,867,True,1.969,
+18,262567,bsgs,20260924,529,True,1.077,
+18,262567,rho,20260922,-1,False,19324.794,
+18,262567,rho,20260923,5557,True,17.102,
+18,262567,rho,20260924,-1,False,20466.252,
+18,262567,kanga,20260922,-1,False,111.997,ValueError: base is not invertible for the given modulus
+18,262567,kanga,20260923,-1,False,15.580,ValueError: base is not invertible for the given modulus
+18,262567,kanga,20260924,26864,True,103.688,

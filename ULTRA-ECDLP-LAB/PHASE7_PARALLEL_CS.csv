@@ -1,0 +1,29 @@
+# Toy-ECDLP parallel collision engine — Phase 7 (van Oorschot-Wiener distributed kangaroo).
+# Instance: p=4294966177=2^32-1119, order l=4294835173 (prime), G=(1960037684,560815139).
+# Interval ECDLP: P=k*G, k uniform in [1,N), N=2^db, db in {12,16,20,24,28}. Same k per db as Phase 6 (mt19937_64 seed 20260922).
+# Engine: W=8 walkers PER THREAD (total W=8*T), all walkers share ONE deterministic jump rule
+#   f ((x>>8)&31 over K=32 jumps of size in [1,2*sqrt(N)]), so tame/wild orbits coalesce.
+#   Distinguished-point pruning: a walker reports (point,dist,owner) only when (x & DPMASK)==0,
+#   DPMASK=2^b-1, b=6 => 1/64 of points; then it restarts from a fresh random start.
+#   Cross-owner DP match => k = d_tame - d_wild (mod l); verified by independent scalar mul.
+# steps=walker point-steps (sum over all walkers) to first verified solution; mem_entries=# DP table entries.
+# REP=5 repeats per (T,db); the row shown is the min-wall run.
+# Finding: DP output keeps shared memory ~sqrt(N)/8 .. ~1/64 of BSGS's table for the same db
+#   (at db=28: 486 entries vs BSGS 16384); wall time shrinks with walker count (more walkers,
+#   same job); ns/step drops ~3.6x from T=1 to T=4 when work is spread across threads.
+arc,T,db,N_label,steps,wall_ms,ns_per_step,mem_entries,dps,k,verified
+vow,1,12,2^12,3618,1.144,316.09,5,5,2562,1
+vow,2,12,2^12,9962,1.625,163.13,6,6,2562,1
+vow,4,12,2^12,13224,1.192,90.14,10,10,2562,1
+vow,1,16,2^16,5811,1.745,300.36,10,10,23710,1
+vow,2,16,2^16,12328,1.994,161.75,9,9,23710,1
+vow,4,16,2^16,16242,1.759,108.29,15,15,23710,1
+vow,1,20,2^20,6577,2.009,305.44,74,74,858515,1
+vow,2,20,2^20,14965,2.146,143.38,47,47,858515,1
+vow,4,20,2^20,28075,2.301,81.97,95,95,858515,1
+vow,1,24,2^24,8224,2.432,295.72,113,113,8763942,1
+vow,2,24,2^24,14246,2.320,162.82,42,42,8763942,1
+vow,4,24,2^24,29881,2.322,77.71,43,43,8763942,1
+vow,1,28,2^28,24727,7.237,292.68,314,314,181448730,1
+vow,2,28,2^28,16154,2.563,158.69,138,138,181448730,1
+vow,4,28,2^28,34335,2.765,80.52,486,486,181448730,1

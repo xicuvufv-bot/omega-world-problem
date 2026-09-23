@@ -1,0 +1,12 @@
+# PHASE3_SIMD_RESULTS.csv
+# Toy field p=4294966177=2^32-1119. Ryzen 3 3200G (Zen+) @3.6GHz, g++ 16.1, -march=native.
+# Lanes stored as 64-bit values in [0,P). AVX2 4-lane kernels (add/sub/mul) validated vs
+# fold-based scalar reference (400k random operands each; "valid"=YES on all sample sets).
+# ns_per_op = total / (iterations * lanes). speedup = scalar/avx2.
+op,flags,scalar_ns,avx2_ns,speedup,valid
+add,-O3,2.1554,0.2165,9.955,YES
+sub,-O3,2.5149,0.2649,9.493,YES
+mul,-O3,1.8684,1.3568,1.377,YES
+add,-O2,2.1909,0.2522,8.687,YES
+sub,-O2,2.1912,0.3125,7.012,YES
+mul,-O2,2.1938,1.5458,1.419,YES

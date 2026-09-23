@@ -1,0 +1,7 @@
+probe,class,alpha,R2,note
+E1.bsgs-fallback,1,0.5684,0.9923,
+E2.bulk-bsgs,2,0.4621,0.914,constant-factor multi-target amortization
+E4.kanga-W16-b6-K16,1,0.448,0.8108,
+E4.kanga-W32-b6-K32,1,0.3955,0.8171,
+E4.kanga-W64-b8-K32,0,0.7524,0.6857,
+E4.kanga-W128-b8-K64,1,0.5548,0.707,

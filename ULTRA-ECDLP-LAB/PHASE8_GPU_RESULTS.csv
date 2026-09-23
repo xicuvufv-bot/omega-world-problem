@@ -1,0 +1,14 @@
+# Toy-ECDLP GPU/OpenCL experiment — Phase 8.
+# Device: AMD Radeon Vega 8 Graphics (gfx902), 8 CUs @ 1250 MHz, OpenCL 2.1 AMD-APP, max workgroup 256.
+# Kernel: EC mixed-add (Jacobian + affine, ec::Jacobian::add_affine, 8M+3S, a=3 field p=4294966177)
+#   replicated bit-for-bit in OpenCL C; per-walker checksum accumulated over (X,Y,Z).
+# CPU reference: identical walk on 4 threads using src/ec.hpp FpNaive (the Phase 4/7 engine).
+# matched=1 iff the GPU checksum equals the CPU checksum: same math, same result.
+# ops = walkers * iters mixed-add steps. Rates = ops / wall (includes transfer; CL_TRUE blocking read).
+# Finding: Vega 8 sustained ~600 Mops/s (≈ 600/5498 = 11% of 8CU*1.25GHz peak, 32-bit mod mul chain
+#   dominates); 4-CPU-thread FpNaive ~40 Mops/s => GPU 14.7-20.4x. OpenCL kernel verifies identical.
+# Row format: phase8,ops,gpu_ms,gpu_mops,cpu_ms,cpu_mops,ratio,matched
+phase8,ops,16777216,gpu_ms,33.2,gpu_mops,505.912,cpu_ms,678.1,cpu_mops,24.740,ratio,20.4491,matched,1
+phase8,ops,268435456,gpu_ms,448.3,gpu_mops,598.722,cpu_ms,6632.8,cpu_mops,40.471,ratio,14.7940,matched,1
+phase8,ops,536870912,gpu_ms,893.8,gpu_mops,600.679,cpu_ms,13191.9,cpu_mops,40.697,ratio,14.7597,matched,1
+phase8,ops,1073741824,gpu_ms,1784.4,gpu_mops,601.734,cpu_ms,26207.9,cpu_mops,40.970,ratio,14.6871,matched,1

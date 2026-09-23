@@ -1,0 +1,8 @@
+probe,n_sizes,alpha,R2
+E1.bsgs-fallback,5,0.5684,0.9923
+E2.bulk-bsgs,5,0.4621,0.914
+E4.kanga-W16-b6-K16,3,0.448,0.8108
+E4.kanga-W32-b6-K32,3,0.3955,0.8171
+E4.kanga-W64-b8-K32,3,0.7524,0.6857
+E4.kanga-W128-b8-K64,3,0.5548,0.707
+lab.bsgs-mean,5,0.494,0.9997

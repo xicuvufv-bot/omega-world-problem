@@ -1,0 +1,28 @@
+# KAGGLE_RESULTS — T4×2 campaign
+
+Status: SCHEDULED (no GPU compute was executed on Kaggle during this session;
+all results above are local CPU on the Windows research box).
+
+## Planned campaign (batch jobs for GPU0/GPU1)
+
+1. **B_scale** — shared-base bulk BSGS to db = 24..30 on T4×2 (10+ targets per size),
+   confirm α = 0.5 and quantify constant vs single-target. Expect ~3-4x constant only.
+   GPU0.
+2. **B_glv** — full-range (k ~ l) GLV-bsgs vs plain bsgs on the toy curve, to measure the
+   √2 constant *in the regime where GLV actually applies* (interval regime REFUTED).
+   GPU1.
+3. **B_kanga_stab** — repeat kangaroo with the Z≡0 crash guard applied to the random
+   restart path; test whether suppression of the crash changes W/b/K stability. Marked
+   CLASS-0 risk; run for completeness, expect no α change.
+4. **B_repro** — full reproduction of SCALING_RESULTS.csv (bsgs/rho/kanga over
+   db=10..18, 3 seeds) on T4×2 as ground truth for cross-check.
+
+## Checkpoints
+- Each job writes lab/KAGGLE_<job>.csv with rows [db, method, seed, steps, ok, ms].
+- Post-run reconciliation against CLASSIFICATION_AUTONOMOUS.csv is REQUIRED before any
+  claim is upgraded.
+- If any table shows α < 0.45 with R² > 0.95 on ≥ 6 genuinely varied orders → escalate
+  to CLASS-4 investigation (independent implementation + more seeds + mathematical
+  derivation) BEFORE writing anything into the report.
+
+(Empty here by design: no unverified GPU numbers.)

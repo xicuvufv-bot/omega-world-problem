@@ -1,0 +1,10 @@
+# PHASE4_THREAD_SCALING.csv
+# Toy instance, independent Jacobian dbl+mixed-add walks (naive field, fastest measured EC
+# config on this box per MICROBENCHMARKS.csv). 4 threads = Ryzen 3 3200G 4C/4T @3.6GHz.
+# Best of 5 reps; ops/sec = total loop iterations / wall time; speedup vs 1-thread run.
+# Embarrassingly parallel (no shared state, thread-local Jacobian), no false sharing.
+threads,ops_per_sec,speedup_vs_1,valid_samples
+1,36135816.466,1.000,OK
+2,71271392.554,1.972,OK
+3,107533626.661,2.976,OK
+4,129254283.568,3.577,OK

@@ -1,0 +1,13 @@
+db,rep,algorithm,steps,ms,ok,verified,note
+20,0,brute,63554,14.420,1,1,smooth-order control
+20,0,ph,67,0.394,1,1,smooth-order control
+20,1,brute,656315,267.414,1,1,smooth-order control
+20,1,ph,73,0.397,1,1,smooth-order control
+22,0,brute,3391117,1318.891,1,1,smooth-order control
+22,0,ph,59,0.388,1,1,smooth-order control
+22,1,brute,645579,138.512,1,1,smooth-order control
+22,1,ph,64,0.425,1,1,smooth-order control
+24,0,brute,2423702,519.207,1,1,smooth-order control
+24,0,ph,60,0.374,1,1,smooth-order control
+24,1,brute,15607131,3339.050,1,1,smooth-order control
+24,1,ph,65,0.386,1,1,smooth-order control
