@@ -1,0 +1,7 @@
+{
+ "id": "B_repro",
+ "gpu": 1,
+ "payload": "kaggle_t4.py",
+ "args": "--batch B_repro db 10 12 14 16 18 seeds 3",
+ "state": "PENDING_NO_CLI"
+}

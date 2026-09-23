@@ -1,0 +1,7 @@
+{
+ "id": "B_glv",
+ "gpu": 1,
+ "payload": "kaggle_t4.py",
+ "args": "--batch B_glv mode glv db 18 20 22",
+ "state": "PENDING_NO_CLI"
+}

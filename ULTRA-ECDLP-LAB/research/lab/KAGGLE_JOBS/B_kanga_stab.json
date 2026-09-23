@@ -1,0 +1,7 @@
+{
+ "id": "B_kanga_stab",
+ "gpu": 0,
+ "payload": "kaggle_t4.py",
+ "args": "--batch B_kanga_stab db 14 16 18 20 22 seeds 3",
+ "state": "PENDING_NO_CLI"
+}

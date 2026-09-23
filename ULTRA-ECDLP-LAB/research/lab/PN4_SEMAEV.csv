@@ -1,0 +1,6 @@
+db,bsgs_steps,pair_relations_found,per_sample_ms,sampled_frac_of_p,note
+10,50,7,0.095,6.98e-09,"relation surface cost ~O(p) per useful relation; bsgs is ~sqrt(N). At db=10, bsgs=50 steps << p=4294966177. IC beats sqrt(N) only at astronomic db."
+12,87,7,0.077,6.98e-09,"relation surface cost ~O(p) per useful relation; bsgs is ~sqrt(N). At db=12, bsgs=87 steps << p=4294966177. IC beats sqrt(N) only at astronomic db."
+14,173,6,0.079,6.98e-09,"relation surface cost ~O(p) per useful relation; bsgs is ~sqrt(N). At db=14, bsgs=173 steps << p=4294966177. IC beats sqrt(N) only at astronomic db."
+16,292,5,0.075,6.98e-09,"relation surface cost ~O(p) per useful relation; bsgs is ~sqrt(N). At db=16, bsgs=292 steps << p=4294966177. IC beats sqrt(N) only at astronomic db."
+18,678,7,0.080,6.98e-09,"relation surface cost ~O(p) per useful relation; bsgs is ~sqrt(N). At db=18, bsgs=678 steps << p=4294966177. IC beats sqrt(N) only at astronomic db."

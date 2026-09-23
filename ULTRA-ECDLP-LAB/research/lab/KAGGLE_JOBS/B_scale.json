@@ -1,0 +1,7 @@
+{
+ "id": "B_scale",
+ "gpu": 0,
+ "payload": "kaggle_t4.py",
+ "args": "--batch B_scale db 24 26 28 30 targets 10",
+ "state": "PENDING_NO_CLI"
+}

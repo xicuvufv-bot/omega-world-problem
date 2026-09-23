@@ -1,0 +1,26 @@
+﻿csv,row_idx,seed,ok,steps,detail,verdict
+AUTOTUNE_RESULTS.csv,33,20260922,ok=0,,wallcap/fail,logged
+AUTOTUNE_RESULTS.csv,69,20260922,ok=0,,wallcap/fail,logged
+GOLDEN_BASELINE.csv,3,20260922,ok=0,-1.0,wallcap/fail,logged
+GOLDEN_BASELINE.csv,5,20260924,ok=0,-1.0,wallcap/fail,logged
+GOLDEN_BASELINE.csv,9,20260922,ok=0,-1.0,wallcap/fail,logged
+GOLDEN_BASELINE.csv,10,20260923,ok=0,-1.0,wallcap/fail,logged
+GOLDEN_BASELINE.csv,11,20260924,ok=0,-1.0,wallcap/fail,logged
+GOLDEN_BASELINE.csv,15,20260922,ok=0,-1.0,wallcap/fail,logged
+GOLDEN_BASELINE.csv,17,20260924,ok=0,-1.0,wallcap/fail,logged
+GOLDEN_BASELINE.csv,23,20260924,ok=0,-1.0,wallcap/fail,logged
+GOLDEN_BASELINE.csv,27,20260922,ok=0,-1.0,wallcap/fail,logged
+GOLDEN_BASELINE.csv,28,20260923,ok=0,-1.0,wallcap/fail,logged
+GOLDEN_BASELINE.csv,63,20260922,ok=0,-1.0,wallcap/fail,logged
+GOLDEN_BASELINE.csv,64,20260923,ok=0,-1.0,wallcap/fail,logged
+GOLDEN_BASELINE.csv,65,20260924,ok=0,-1.0,wallcap/fail,logged
+GOLDEN_BASELINE.csv,69,20260922,ok=0,-1.0,wallcap/fail,logged
+GOLDEN_BASELINE.csv,70,20260923,ok=0,-1.0,wallcap/fail,logged
+GOLDEN_BASELINE.csv,71,20260924,ok=0,-1.0,wallcap/fail,logged
+RESULTS_STRUCTURAL.csv,7,,ok=0,-13024.0,wallcap/fail,logged
+RESULTS_STRUCTURAL.csv,9,,ok=0,-4933.0,wallcap/fail,logged
+RESULTS_STRUCTURAL.csv,10,,ok=1,20.4,steps=0.6375x sqrtN,E2 bulk: multi-target amortized = CLASS-2 (shared-G constant 2.6-4.3x), NOT single-target sub-sqrt
+RESULTS_STRUCTURAL.csv,12,,ok=1,25.0,steps=0.3906x sqrtN,E2 bulk: multi-target amortized = CLASS-2 constant lever; single-target alpha unaffected
+RESULTS_STRUCTURAL.csv,14,,ok=1,79.4,steps=0.6203x sqrtN,E2 bulk: multi-target amortized = CLASS-2
+RESULTS_STRUCTURAL.csv,16,,ok=1,78.2,steps=0.3055x sqrtN,E2 bulk: multi-target amortized = CLASS-2 (NOT sub-sqrt on single instance)
+RESULTS_STRUCTURAL.csv,18,,ok=1,283.8,steps=0.5543x sqrtN,E2 bulk: multi-target amortized = CLASS-2
