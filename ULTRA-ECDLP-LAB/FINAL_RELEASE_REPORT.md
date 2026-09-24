@@ -21,16 +21,27 @@ fresh clone — nothing invented.
 
 ## Clean-clone final standard (Phase 20) — evidence
 
-Clone created with `git clone` into a fresh temp directory (no files copied):
+Two independent fresh clones are the evidence — one mid-release, one at the
+**final HEAD (commit `28b68c9`)**:
 
 ```
-git clone <repo> %TEMP%\ecdlp_cleanclone
+git clone <repo> %TEMP%\ecdlp_cleanclone      # mid-release clean clone
 cd ULTRA-ECDLP-LAB
 python build.py cpu                          # -> compiles v4_cpu_engine in-clone   [OK]
 python tests/run_all.py                       # 10/10                               [OK]
 cd research/v4 && python kaggle_v5_run.py     # full pipeline, CPU path, honest      [OK]
   -> TARGET_NOT_REACHED, BASELINE_cpu.csv measured, SCALING_V5.csv (19 pts,
      alpha=0.0595 R2=0.99), KAGGLE_V5_FINAL_REPORT.md written
+
+git clone <repo> %TEMP%\ecdlp_finalclone     # FINAL HEAD (28b68c9)
+cd ULTRA-ECDLP-LAB
+python tests/run_all.py                       # 10/10, engine built from source      [OK]
+cd research/v4 && python kaggle_v5_run.py     # full pipeline end-to-end             [OK]
+  -> TARGET_NOT_REACHED; CPU bench re-measured; scaling reproduced
+     alpha=0.0595 R2=0.990 over 19 points
+git status --short -- ULTRA-ECDLP-LAB          # EMPTY — regenerated artifacts are
+                                            #   byte-identical to the committed ones
+                                            #   (deterministic/reproducible outputs)
 ```
 
 No JSON/source from the author's machine was consulted by any of it.
