@@ -1,0 +1,11 @@
+index,k_hex,kGx_matches,kGy_matches,interval_ok,verdict
+0,0x3ddb07f954982df627,0,0,0,fail
+1,0x26fc2f9696ba6fdefe,0,0,0,fail
+2,0x3c207cef4682d960f3,0,0,0,fail
+3,0x218f26ea0e2b2def86,0,0,0,fail
+4,0x31519a67643e57a5fe,0,0,0,fail
+5,0x255f3882f818f48098,0,0,0,fail
+6,0x37d5d32986fe24a6a5,0,0,0,fail
+7,0x3dc8c1253cc8018e27,0,0,0,fail
+8,0x3aa6a6aad7cf8c7ac9,0,0,0,fail
+9,0x26a81b36ef2bcd894c,0,0,0,fail

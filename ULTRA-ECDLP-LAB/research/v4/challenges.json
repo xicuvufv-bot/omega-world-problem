@@ -1,0 +1,89 @@
+{
+  "curve": "secp256k1",
+  "bits": 70,
+  "interval": "[2^69, 2^70)",
+  "count": 10,
+  "base_seed": 12648430,
+  "instances": [
+    {
+      "index": 0,
+      "seed": 12648430,
+      "bits": 70,
+      "k": "0x3ddb07f954982df627",
+      "Qx": "0x8b2bc036809f8e536eed90aa01cb2492fd4bc742e9b0d3ee058e264927c85b89",
+      "Qy": "0xce24c2baf0fce7791f063732decc28e83db864691cfc948f2f6460f6a147be70"
+    },
+    {
+      "index": 1,
+      "seed": 12648431,
+      "bits": 70,
+      "k": "0x26fc2f9696ba6fdefe",
+      "Qx": "0xba9980bd5668dac1b3566e66eeb6baa005e7ca9f1a4e0290a795a6d71302521f",
+      "Qy": "0x2fbee1279a86a0c217d4b54d5586923809967014d165cbbcf442c2e350c0e14f"
+    },
+    {
+      "index": 2,
+      "seed": 12648432,
+      "bits": 70,
+      "k": "0x3c207cef4682d960f3",
+      "Qx": "0x1c9476dcceb8f634921ee235e91e0549c102ef1d4c42d161e4541ff944c3145d",
+      "Qy": "0xffac75f1075e0e4ec6ed0e07aef168a4b8e3a10590b9341790a99b84a56dd884"
+    },
+    {
+      "index": 3,
+      "seed": 12648433,
+      "bits": 70,
+      "k": "0x218f26ea0e2b2def86",
+      "Qx": "0xb96387bf6b9f0169fa72b9ad65ff5c28c37b41c858ad45cbf96db39ee7f563ed",
+      "Qy": "0x3c6e2c525ca365551a113e63e48c4202de783cdfaf3adba1b6f5ea943333f631"
+    },
+    {
+      "index": 4,
+      "seed": 12648434,
+      "bits": 70,
+      "k": "0x31519a67643e57a5fe",
+      "Qx": "0xacbf5d838b1c7b5af2c9add3f97e23bf3fafce80aa8a6eb4163948ca86f6e4af",
+      "Qy": "0xae44928bd6764f8e73e9370865bcb3c50106007644fd762d7dab77598c3d76af"
+    },
+    {
+      "index": 5,
+      "seed": 12648435,
+      "bits": 70,
+      "k": "0x255f3882f818f48098",
+      "Qx": "0x6fea2e1166e9a24cd85b2d9bad0d684072f87f59d389b3ee65f6889933cf176e",
+      "Qy": "0x70edd4fb07e953450f1fbaedab9cb5d68c4a70c782b61c9be8f0f14e1f7a7e02"
+    },
+    {
+      "index": 6,
+      "seed": 12648436,
+      "bits": 70,
+      "k": "0x37d5d32986fe24a6a5",
+      "Qx": "0x7c851880a2dc23811472242255b9d4b16d61420e428764070da079e7d8c7fe97",
+      "Qy": "0x20d2bfce39c4a99bfcd687e099b5d01e21135d22e3441469c1eba0c7bff54046"
+    },
+    {
+      "index": 7,
+      "seed": 12648437,
+      "bits": 70,
+      "k": "0x3dc8c1253cc8018e27",
+      "Qx": "0xf7ec22be4f9038580144335fdece8ceccc09040d19ab37601bf44305218d487c",
+      "Qy": "0x738f47184cfcca8515716ffb4449995dffe2932dba7efad74d3069f1a80e5cb6"
+    },
+    {
+      "index": 8,
+      "seed": 12648438,
+      "bits": 70,
+      "k": "0x3aa6a6aad7cf8c7ac9",
+      "Qx": "0xef4a8479ca71c8b52fa8bae4d1e2df29b4d4babf53f4c3eab915412c3849fdd1",
+      "Qy": "0x5439749c7997e5d45bb04b1f17f6f658d37a8946a02c966f13568a481624a843"
+    },
+    {
+      "index": 9,
+      "seed": 12648439,
+      "bits": 70,
+      "k": "0x26a81b36ef2bcd894c",
+      "Qx": "0x15b8c439aa21d56da89767608e118d241eea8ff1fd6e25f8bfe8fbda0ddf9155",
+      "Qy": "0x6a47ce77301999206ba2ff75027340af97b584bc11f166732119661ba45ae400"
+    }
+  ]
+}

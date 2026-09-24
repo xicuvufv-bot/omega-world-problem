@@ -1,0 +1,27 @@
+{
+  "timestamp": "2026-09-24T13:50:27.212501",
+  "host": "KernelOS-PC",
+  "platform": "Windows-10-10.0.22631-SP0",
+  "cpu": "AMD64 Family 23 Model 24 Stepping 1, AuthenticAMD",
+  "python": "3.11.9",
+  "python_path": "C:\\Users\\Administrator\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+  "is_kaggle": false,
+  "cwd": "C:\\Users\\Administrator\\Documents\\Default Project\\ULTRA-ECDLP-LAB\\research\\v4",
+  "gpu": {
+    "count": 0,
+    "devices": [],
+    "nvcc_path": null,
+    "cuda_version": null,
+    "note": "nvidia-smi NOT present: no GPU claims possible from this host."
+  },
+  "tools": {
+    "python": "C:\\Users\\Administrator\\AppData\\Local\\Programs\\Python\\Python311\\python.EXE",
+    "gcc": "C:\\ProgramData\\mingw64\\mingw64\\bin\\gcc.EXE",
+    "g++": "C:\\ProgramData\\mingw64\\mingw64\\bin\\g++.EXE",
+    "nvcc": null,
+    "make": null,
+    "git": "C:\\Program Files\\Git\\cmd\\git.EXE",
+    "kaggle": null,
+    "ffmpeg": "C:\\ProgramData\\chocolatey\\bin\\ffmpeg.EXE"
+  }
+}

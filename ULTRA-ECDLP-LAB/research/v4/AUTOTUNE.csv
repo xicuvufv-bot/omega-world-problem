@@ -1,0 +1,16 @@
+bits,dpbits,nstart,rate_steps_per_s,src
+20,12,4,6.88e+04,cpu_measured
+21,12,4,7.60e+04,cpu_measured
+22,12,4,7.56e+04,cpu_measured
+23,12,4,7.54e+04,cpu_measured
+24,12,4,7.10e+04,cpu_measured
+25,12,4,7.03e+04,cpu_measured
+26,12,4,7.11e+04,cpu_measured
+27,12,4,7.16e+04,cpu_measured
+28,12,4,7.10e+04,cpu_measured
+29,12,4,7.09e+04,cpu_measured
+30,12,4,7.05e+04,cpu_measured
+31,12,4,6.97e+04,cpu_measured
+32,12,4,6.99e+04,cpu_measured
+33,12,4,6.92e+04,cpu_measured
+34,12,4,6.96e+04,cpu_measured

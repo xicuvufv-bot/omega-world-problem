@@ -1,0 +1,4 @@
+nstart_pow,dpbits,rate,src
+20,24,0.0,staged_no_cuda
+21,24,0.0,staged_no_cuda
+22,24,0.0,staged_no_cuda

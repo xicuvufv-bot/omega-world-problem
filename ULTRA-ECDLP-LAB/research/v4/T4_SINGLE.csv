@@ -1,0 +1,2 @@
+gpus,dpbits,nstart,rate_steps_per_s,src
+1,12,8,0.0,staged_no_cuda

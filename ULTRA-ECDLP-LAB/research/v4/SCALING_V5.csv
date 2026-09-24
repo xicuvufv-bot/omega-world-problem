@@ -1,0 +1,21 @@
+bits,steps,src
+16,17754,cpu_measured
+17,17316,cpu_measured
+18,164056,cpu_measured
+19,163907,cpu_measured
+20,37024,cpu_measured
+21,36857,cpu_measured
+22,163682,cpu_measured
+23,36855,cpu_measured
+24,36043,cpu_measured
+25,161427,cpu_measured
+26,159599,cpu_measured
+27,11275,cpu_measured
+28,67815,cpu_measured
+29,71759,cpu_measured
+30,153307,cpu_measured
+31,234613,cpu_measured
+32,167019,cpu_measured
+33,394579,cpu_measured
+34,462045,cpu_measured
+# alpha=0.0595 r2=0.9897 points=19

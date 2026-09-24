@@ -1,0 +1,5 @@
+dpbits,rate_steps_per_s,src
+20,0.0,staged_no_cuda
+22,0.0,staged_no_cuda
+24,0.0,staged_no_cuda
+26,0.0,staged_no_cuda

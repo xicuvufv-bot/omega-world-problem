@@ -1,0 +1,9 @@
+metric,value,proven
+instances_counted_solved,0,1
+total_wall_time_s,0,0
+mean_rate_steps_per_s,0.0,0
+median_time_s,0.0,0
+p90_time_s,0.0,0
+p95_time_s,0.0,0
+max_single_instance_time_s,0.0,0
+verdict_20min,TARGET_NOT_REACHED,0
