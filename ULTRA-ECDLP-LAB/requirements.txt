@@ -1,0 +1,10 @@
+# ULTRA-ECDLP-LAB Python runtime dependencies (all other imports are stdlib).
+# numpy is used only by research/ scripts (gen, bench, fit, kaggle_t4, ...).
+# The research/v4 ECDLP pipeline (challenge70, detect_env, kaggle_v5_run,
+# kaggle_70bit_run, the nocuda report path) is PURE STDLIB and runs without
+# installing anything.
+#
+# cupy is OPTIONAL and Kaggle-only: Kaggle NVIDIA runtimes ship it preinstalled.
+# It is still imported under a try/except guard in kaggle_t4.py so that CPU-only
+# machines stay importable. Do not add it to this file.
+numpy>=1.24
