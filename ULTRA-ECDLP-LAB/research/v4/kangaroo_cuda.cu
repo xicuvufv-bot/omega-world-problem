@@ -57,6 +57,7 @@
 
 typedef std::uint64_t u64;
 typedef std::int64_t  i64;
+typedef std::uint32_t u32;
 
 #define CHECK_CUDA(x) do { cudaError_t _e = (x); if (_e != cudaSuccess) { \
     std::fprintf(stderr, "CUDA %s @ %s:%d: %s\n", #x, __FILE__, __LINE__, \
@@ -320,7 +321,7 @@ __global__ void walkKernelSimple(const JumpEnt* __restrict__ J,
         for(int k=0;k<4;k++){ dpBuf[slot].x[k]=ax[k]; dpBuf[slot].d[k]=d[k]; }
         dpBuf[slot].kind=tame?0u:1u;
         dpBuf[slot].dev=0;
-      } else { atomicExch(stopFlag,1); }
+      } else { atomicExch((int*)stopFlag,1); }
     }
   }
   actStep[t]=(u64)ran;
@@ -401,7 +402,7 @@ __global__ void walkKernelBatch(const JumpEnt* __restrict__ J,
         for(int k=0;k<4;k++){ dpBuf[slot].x[k]=ax[k]; dpBuf[slot].d[k]=d[k]; }
         dpBuf[slot].kind=tame?0u:1u;
         dpBuf[slot].dev=0;
-      } else { atomicExch(stopFlag,1); }
+      } else { atomicExch((int*)stopFlag,1); }
     }
     jAddAff(pt,pt,J[idx].x,J[idx].y);
     nAdd(d,d,J[idx].d);
