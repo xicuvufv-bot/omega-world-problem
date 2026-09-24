@@ -68,8 +68,9 @@ typedef std::uint32_t u32;
 // by pointer (ODR-use), so a host-side object has no device symbol.
 // Device compilation therefore reads them from __constant__ memory while
 // host compilation keeps ordinary host arrays; the macros redirect each
-// compilation pass to the right symbol.
-#ifdef __CUDA_ARCH__
+// compilation pass to the right symbol. The __constant__ mirrors stay
+// visible to BOTH passes (nvcc's host stub must register them); only the
+// macro redirects are pass-conditional.
 __constant__ u64 P_d[4] = { 0xFFFFFFFEFFFFFC2FULL, 0xFFFFFFFFFFFFFFFFULL,
                      0xFFFFFFFFFFFFFFFFULL, 0xFFFFFFFFFFFFFFFFULL };
 __constant__ u64 N_d[4] = { 0xBFD25E8CD0364141ULL, 0xBAAEDCE6AF48A03BULL,
@@ -79,6 +80,7 @@ __constant__ u64 GX_d[4] = { 0x59F2815B16F81798ULL, 0x029BFCDB2DCE28D9ULL,
                       0x55A06295CE870B07ULL, 0x79BE667EF9DCBBACULL };
 __constant__ u64 GY_d[4] = { 0x9C47D08FFB10D4B8ULL, 0xFD17B448A6855419ULL,
                       0x5DA4FBFC0E1108A8ULL, 0x483ADA7726A3C465ULL };
+#ifdef __CUDA_ARCH__
 #define P_ P_d
 #define N_ N_d
 #define CP_ CP_d
