@@ -1,1 +1,25 @@
-﻿__pycache__/
+﻿# Python
+__pycache__/
+*.py[cod]
+
+# Windows / build artifacts
+*.exe
+*.o
+*.obj
+*.dll
+*.pdb
+
+# Native binaries built from source
+ULTRA-ECDLP-LAB/v4_cpu_engine
+ULTRA-ECDLP-LAB/kangaroo_cuda
+v4_cpu_engine
+kangaroo_cuda
+micro_O2
+micro_O3
+micro_Ofast
+micro_native
+
+# Scratch / experiment files (never part of the release)
+_t*
+_v5_pipeline.log
+_v5_*.log
