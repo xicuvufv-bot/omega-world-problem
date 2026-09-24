@@ -64,14 +64,14 @@ typedef std::uint32_t u32;
                  cudaGetErrorString(_e)); std::exit(1); } } while (0)
 
 // ---------------- secp256k1 constants (identical to CPU engine) ----
-static u64 P_[4] = { 0xFFFFFFFEFFFFFC2FULL, 0xFFFFFFFFFFFFFFFFULL,
+static constexpr u64 P_[4] = { 0xFFFFFFFEFFFFFC2FULL, 0xFFFFFFFFFFFFFFFFULL,
                      0xFFFFFFFFFFFFFFFFULL, 0xFFFFFFFFFFFFFFFFULL };
-static u64 N_[4] = { 0xBFD25E8CD0364141ULL, 0xBAAEDCE6AF48A03BULL,
+static constexpr u64 N_[4] = { 0xBFD25E8CD0364141ULL, 0xBAAEDCE6AF48A03BULL,
                      0xFFFFFFFFFFFFFFFEULL, 0xFFFFFFFFFFFFFFFFULL };
-static u64 CP_[4] = { 0x1000003D1ULL, 0, 0, 0 };          // 2^256 - p
-static u64 GX_[4] = { 0x59F2815B16F81798ULL, 0x029BFCDB2DCE28D9ULL,
+static constexpr u64 CP_[4] = { 0x1000003D1ULL, 0, 0, 0 };          // 2^256 - p
+static constexpr u64 GX_[4] = { 0x59F2815B16F81798ULL, 0x029BFCDB2DCE28D9ULL,
                       0x55A06295CE870B07ULL, 0x79BE667EF9DCBBACULL };
-static u64 GY_[4] = { 0x9C47D08FFB10D4B8ULL, 0xFD17B448A6855419ULL,
+static constexpr u64 GY_[4] = { 0x9C47D08FFB10D4B8ULL, 0xFD17B448A6855419ULL,
                       0x5DA4FBFC0E1108A8ULL, 0x483ADA7726A3C465ULL };
 
 // ============================================================
