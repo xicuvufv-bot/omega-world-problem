@@ -1,0 +1,92 @@
+{
+ "ideas": [
+  {
+   "complexity": "same per-step cost, ~0.55x total ops",
+   "id": "I01",
+   "mechanism": "canonicalize y (negate point+distance if y>p/2); jumps on x (invariant); halves effective space",
+   "source": "R01/R03/P03",
+   "status": "SURVIVING (PILOT P1: B=32 ratio 0.31 over 12 paired runs; B=24/28 need restart tuning - cycle-density regime)",
+   "title": "negation map (equivalence class {P,-P})"
+  },
+  {
+   "complexity": "K 1.715 theory; +loop risk",
+   "id": "I02",
+   "mechanism": "add second wild herd with mirrored offset; 3 pairwise collision channels",
+   "source": "R01/P05",
+   "status": "queued pilot P4",
+   "title": "3-herd tame/wild1/wild2"
+  },
+  {
+   "complexity": "claimed -12..26% ops",
+   "id": "I03",
+   "mechanism": "jump sizes spread over ~6 bits instead of clustered",
+   "source": "R04 (claim unverified)",
+   "status": "queued pilot P2 (falsify)",
+   "title": "jump-table variance (spread)"
+  },
+  {
+   "complexity": "claimed -21% (stacked, unverified)",
+   "id": "I04",
+   "mechanism": "idx = xor-fold(all x limbs) & mask instead of low bits",
+   "source": "R04 (claim unverified)",
+   "status": "queued pilot P3 (falsify)",
+   "title": "XOR-fold jump index hash"
+  },
+  {
+   "complexity": "same ops, less RAM",
+   "id": "I05",
+   "mechanism": "truncate x to 12-20B signature + truncated distance; exact resolve on match",
+   "source": "R01 (35B), R03 (16B+BSGS)",
+   "status": "adapt after P1 (measure RAM/verify cost)",
+   "title": "compact DP records"
+  },
+  {
+   "complexity": "same ops, better scaling",
+   "id": "I06",
+   "mechanism": "run tame table-build and wild hunt simultaneously (t^2 growth)",
+   "source": "R03",
+   "status": "compare vs our rounds design on GPU",
+   "title": "concurrent tame+wild"
+  },
+  {
+   "complexity": "saves recompute on long runs",
+   "id": "I07",
+   "mechanism": "pregenerate tame table to file; resume wilds",
+   "source": "R01/R03",
+   "status": "adapt for 70-bit campaign",
+   "title": "tames file + checkpoints + ramlimit"
+  },
+  {
+   "complexity": "faster per-op",
+   "id": "I08",
+   "mechanism": "2-step folding modmul, delayed-shift inverse, PTX ILP (4 walks/thread)",
+   "source": "R01/R02/R05",
+   "status": "GPU compare vs our kernel (measure, never assume)",
+   "title": "PTX field backend"
+  },
+  {
+   "complexity": "n/a to interval walk",
+   "id": "I09",
+   "mechanism": "endo 6x coverage applies to prefix search, NOT interval DLP (needs full pubkey relation)",
+   "source": "R05",
+   "status": "REJECTED for walk (documented why)",
+   "title": "endomorphism 6x (vanity-only)"
+  },
+  {
+   "complexity": "setup-only speedup",
+   "id": "I10",
+   "mechanism": "GLV halves doublings in scalar mults (genJumps/genStarts only)",
+   "source": "P04",
+   "status": "LOW priority (walk uses adds)",
+   "title": "GLV scalar decomposition"
+  },
+  {
+   "complexity": "CLAIMED K~0.72",
+   "id": "I11",
+   "mechanism": "y-based jump selection + canonicalization; unvalidated, mystical framing",
+   "source": "R07/P09",
+   "status": "FALSIFICATION QUEUE (small-scale merge test first)",
+   "title": "Y-walk GLV kangaroo"
+  }
+ ]
+}
