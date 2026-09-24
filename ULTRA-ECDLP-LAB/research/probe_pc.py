@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
-import random, sys
-exec(open(r"C:\Users\Administrator\Documents\Default Project\ULTRA-ECDLP-LAB\research\prime_scaling_run.py", encoding="utf-8").read().split("def main():")[0])
+import os, random, sys
+_HERE = os.path.dirname(os.path.abspath(__file__))
+_src = os.path.join(_HERE, "prime_scaling_run.py")
+exec(open(_src, encoding="utf-8").read().split("def main():")[0])
 
 # quick sanity: count orders for primes near 1024
 from collections import Counter
