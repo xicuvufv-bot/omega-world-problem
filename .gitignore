@@ -1,0 +1,21 @@
+# Dependencies / build artifacts
+node_modules/
+dist/
+build/
+release/
+.target/
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Large scratch data
+*.temp
+*.zip
+ppm.temp
+
+# OS / tooling
+.DS_Store
+Thumbs.db
+.pytest_cache/
+.playwright-mcp/

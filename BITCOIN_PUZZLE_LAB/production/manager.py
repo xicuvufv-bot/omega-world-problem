@@ -275,6 +275,19 @@ def cmd_found(args):
             print(fh.read().strip())
 
 
+def cmd_sniper(args):
+    from .sniper import Sniper
+    sniper = Sniper(gpus=args.gpus or 0, poll=args.poll, extra=args.extra,
+                    dry_run=args.dry_run, max_fetch=args.max_fetch)
+    if args.once:
+        n = sniper.run_once()
+        print("sniped once: %d txid(s) in the poll window." % n)
+        return
+    print("watching %d unsolved puzzle addresses (poll=%ds, dry_run=%s) ..."
+          % (len(sniper._watch), args.poll, bool(args.dry_run)))
+    sniper.run_forever(use_ws=not args.no_ws)
+
+
 def cmd_serve(args):
     from .cluster import protocol as cprotocol, scheduler as cscheduler
     from .cluster.manager import Coordinator
@@ -442,6 +455,25 @@ def build_parser():
 
     s = sub.add_parser("found", help="show verified found keys")
     s.set_defaults(fn=cmd_found)
+
+    s = sub.add_parser(
+        "sniper",
+        help="watch mempool for puzzle spends; auto-fire Kangaroo on the "
+             "freshly exposed pubkey (R1 -> R2 upgrade)")
+    s.add_argument("--poll", type=int, default=15,
+                   help="REST poll interval seconds (default 15)")
+    s.add_argument("--max-fetch", type=int, default=50,
+                   help="max txids fetched per cycle (default 50)")
+    s.add_argument("--gpus", type=int, default=0,
+                   help="GPU device count for the auto-fired Kangaroo herds")
+    s.add_argument("--once", action="store_true",
+                   help="single poll cycle then exit")
+    s.add_argument("--no-ws", action="store_true",
+                   help="disable the WebSocket txid stream (REST only)")
+    s.add_argument("--dry-run", action="store_true",
+                   help="stage the Kangaroo input + print the command, run nothing")
+    s.add_argument("--extra", help="extra args forwarded to the Kangaroo engine")
+    s.set_defaults(fn=cmd_sniper)
 
     # ---- cluster commands ----
     s = sub.add_parser("serve", help="start coordinator for remote GPU nodes")

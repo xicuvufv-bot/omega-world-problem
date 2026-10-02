@@ -68,9 +68,15 @@ class KangarooSolver:
         self.stats = {}
 
     def _step(self, point_jac, d):
+        """Advance one hop and return (pt, d, pre_jump_affine).
+
+        The affine is returned (not recomputed) so callers that key a
+        collision table on it avoid a second Fermat inversion per hop --
+        halving the dominant Python cost.  Subclasses that override _step may
+        still return a 2-tuple; the solver tolerates both contracts."""
         aff = to_affine(point_jac)
         b = _jump_bucket(aff)
-        return jac_add_affine(point_jac, *self.jump_aff[b]), d + self.jumps[b]
+        return jac_add_affine(point_jac, *self.jump_aff[b]), d + self.jumps[b], aff
 
     def solve(self, target_jac):
         """Return k in [lo, hi] with target_jac = kG, else raise LookupError.
@@ -88,13 +94,22 @@ class KangarooSolver:
         passes = 0
         hops = 0
 
-        # --- tame trail: every visited point -> its absolute offset ----------
+        # --- tame trail: every visited point -> its absolute offset --------
+        # Each 3-tuple _step carries the pre-jump affine, so the table key is
+        # stored with the distance walked TO that point (one inversion/hop).
+        # A 2-tuple override falls back to the post-jump affine exactly as
+        # v4 did before (contract preserved for research subclasses).
         tame = scalar_mult(lo)
         tame_d = 0
         tame_off = {to_affine(tame): lo}
         for _ in range(tame_steps):
-            tame, tame_d = self._step(tame, tame_d)
-            tame_off[to_affine(tame)] = lo + tame_d
+            pre_d = tame_d
+            res = self._step(tame, tame_d)
+            tame, tame_d = res[0], res[1]
+            if len(res) > 2:
+                tame_off[res[2]] = lo + pre_d
+            else:
+                tame_off[to_affine(tame)] = lo + tame_d
 
         # degenerate case: target IS the low anchor
         aff_q = to_affine(target_jac)
@@ -118,12 +133,18 @@ class KangarooSolver:
                 wild_d = d0
 
             for _ in range(pass_steps):
-                wild, wild_d = self._step(wild, wild_d)
+                pre_wild_d = wild_d
+                res = self._step(wild, wild_d)
+                wild, wild_d = res[0], res[1]
                 hops += 1
-                t_off = tame_off.get(to_affine(wild))
+                if len(res) > 2:
+                    t_off = tame_off.get(res[2])
+                    check_d = pre_wild_d
+                else:
+                    t_off = tame_off.get(to_affine(wild))
+                    check_d = wild_d
                 if t_off is not None:
-                    # t_off is absolute (lo + D_t); wild abs = lo + s_k + wild_d
-                    k = t_off - wild_d              # = lo + s_k
+                    k = t_off - check_d              # = lo + s_k
                     if 0 <= k - lo <= W and point_equal_jac(scalar_mult(k),
                                                             target_jac):
                         self.stats = dict(method="kangaroo", hops=hops,
